@@ -41,14 +41,16 @@ export default class UI {
 
         // event listener for each project
         this.#projectListEl.addEventListener("click", (e) => {
-            if (e.target.nodeName !== "BUTTON") return;
+            // if (e.target.nodeName !== "BUTTON") return;
             switch (e.target.dataset.name) {
                 case "remove-button":
                     PubSub.publish("remove project button clicked", { projectId: e.target.dataset.id });
                     break;
+                case "project-name":
+                    PubSub.publish("project clicked", { projectId: e.target.dataset.id })
             }
         });
-
+        // event listener for project creation
         this.#createProjectButton.addEventListener("click", (e) => {
             e.preventDefault();
             const name = document.querySelector("input[name='project-name']").value;
@@ -72,8 +74,6 @@ export default class UI {
             li.append(this.#projectTemplate(p));
             this.#projectListEl.append(li);
         });
-
-        console.log(projects);
     }
 
     static #projectTemplate(project) {
@@ -82,6 +82,8 @@ export default class UI {
 
         const name = document.createElement("p");
         name.textContent = project.name;
+        name.dataset.name = "project-name";
+        name.dataset.id = project.id;
 
         container.append(name);
         // only create a button if the current project is not the default project

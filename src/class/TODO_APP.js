@@ -12,11 +12,13 @@ export default class TODO_APP {
         const handleCreateTodo = ({ todo }) => this.createTodo(todo);
         const handleRemoveProject = ({ projectId }) => this.removeProject(projectId);
         const handleCreateProject = ({ name }) => this.createProject(name);
+        const handleProjectClicked = ({ projectId }) => this.setActive(projectId);
 
         PubSub.subscribe("remove todo button clicked", handleRemoveTodo);
         PubSub.subscribe("create todo button clicked", handleCreateTodo);
         PubSub.subscribe("create project button clicked", handleCreateProject);
         PubSub.subscribe("remove project button clicked", handleRemoveProject);
+        PubSub.subscribe("project clicked", handleProjectClicked);
         PubSub.publish("initialize todo app", { projects: this.projects });
     }
 
@@ -48,6 +50,16 @@ export default class TODO_APP {
         this.projects = this.projects.filter((p) => p.id !== projectId);
 
         PubSub.publish("project removed", { projects: this.projects });
+    }
+
+    static setActive(projectId) {
+        for (let i = 0; i < this.projects.length; i++) {
+            if(this.projects[i].id === projectId) {
+                this.active = this.projects[i];
+                return;
+            }
+        }
+
     }
 
     static getProjects() {
