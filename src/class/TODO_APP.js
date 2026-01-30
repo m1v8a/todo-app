@@ -5,14 +5,13 @@ import Todo from "./Todo.js";
 export default class TODO_APP {
     static todos = [];
     static projects = [new Project("All", "default")];
-    static active = null;
+    static activeProjectId = null;
 
     static init() {
         const handleRemoveTodo = ({ todoId }) => {
             const todo = this.#findTodo(todoId);
             this.removeTodo(todoId);
             this.#removeTodoFromProject(todo);
-            console.log(this.projects);
         };
         const handleCreateTodo = ({ todo }) => this.createTodo(todo);
         const handleRemoveProject = ({ projectId }) => this.removeProject(projectId);
@@ -24,21 +23,28 @@ export default class TODO_APP {
         PubSub.subscribe("create project button clicked", handleCreateProject);
         PubSub.subscribe("remove project button clicked", handleRemoveProject);
         PubSub.subscribe("project clicked", handleProjectClicked);
-        PubSub.publish("initialize todo app", { projects: this.projects });
+
+        PubSub.publish("projects updated", { projects: this.projects });
+        PubSub.publish("todos updated", { todos: this.#getActiveTodos() });
 
         this.setActive("default");
     }
 
     static createTodo({ title, note, priority, dateCreated, dueDate }) {
-        const todo = new Todo({ title, note, priority, dateCreated, dueDate, projectId: this.active });
+        const todo = new Todo({ title, note, priority, dateCreated, dueDate, projectId: this.activeProjectId });
         this.todos.push(todo);
         this.#addTodoToProject(todo.id);
 
-        PubSub.publish("todos updated", { todos: this.todos });
+        PubSub.publish("todos updated", { todos: this.#getActiveTodos() });
     }
 
     static getTodos() {
         return this.todos;
+    }
+
+    static #getActiveTodos() {
+        if(this.activeProjectId === "default") return this.todos;
+        return this.todos.filter((t) => t.projectId === this.activeProjectId);
     }
 
     static #findTodo(todoId) {
@@ -47,7 +53,7 @@ export default class TODO_APP {
 
     static removeTodo(todoId) {
         this.todos = this.todos.filter((t) => t.id !== todoId);
-        PubSub.publish("todos updated", { todos: this.todos });
+        PubSub.publish("todos updated", { todos: this.#getActiveTodos() });
     }
 
     static createProject(name) {
@@ -64,12 +70,13 @@ export default class TODO_APP {
     }
 
     static setActive(projectId) {
-        this.active = projectId;
+        this.activeProjectId = projectId;
+        PubSub.publish("todos updated", { todos: this.#getActiveTodos() });
     }
 
     static #addTodoToProject(todoId) {
         this.projects = this.projects.map((p) => {
-            if (p.id === this.active) {
+            if (p.id === this.activeProjectId) {
                 p.todos.push(todoId);
             }
             return p

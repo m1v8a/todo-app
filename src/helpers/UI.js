@@ -6,7 +6,6 @@ export default class UI {
     static #createTodoButton = document.querySelector("#create-todo-form button");
     static #createProjectButton = document.querySelector("#create-project-form button");
 
-
     static init() {
         const handleDisplayTodos = ({ todos }) => this.displayTodos(todos);
         const handleDisplayProjects = ({ projects }) => this.displayProjects(projects);
