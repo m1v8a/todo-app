@@ -1,7 +1,28 @@
+import PubSub from "./pubsub.js";
+
 export default class UI {
     static todoListElement = document.querySelector("#todo-list");
 
+
+    static init() {
+        // passing the displayTodo method loses it's reference to this (UI class)
+        // I don't like how I have to bind the methods into 'this'
+        PubSub.subscribe("todo created", this.displayTodos.bind(this));
+        PubSub.subscribe("todo removed", this.displayTodos.bind(this));
+
+
+        this.todoListElement.addEventListener("click", (e) => {
+            if (e.target.nodeName !== "BUTTON") return;
+            switch(e.target.dataset.name) {
+                case "remove-button":
+                    PubSub.publish("remove button clicked", e.target.dataset.id);
+                    break;
+            }
+        });
+    }
+
     static displayTodos(todos) {
+        this.todoListElement.innerHTML = "";
         todos.forEach((t) => {
             const li = document.createElement("li");
             li.append(this.#todoTemplate(t));
@@ -38,7 +59,12 @@ export default class UI {
                 break;
         }
 
-        container.append(title, note, dateCreated, dueDate, priority)
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Remove";
+        removeButton.dataset.id = todo.id;
+        removeButton.dataset.name = "remove-button";
+
+        container.append(title, note, dateCreated, dueDate, priority, removeButton)
 
         return container;
     }

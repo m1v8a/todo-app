@@ -4,6 +4,9 @@ import UI from "./helpers/UI.js";
 
 const createButton = document.querySelector("form button");
 
+TODO_APP.init();
+UI.init();
+
 createButton.addEventListener("click", (e) => {
     e.preventDefault();
     const title = document.querySelector("input[name='title']").value;
@@ -13,7 +16,6 @@ createButton.addEventListener("click", (e) => {
     const dateCreated = new Date().toLocaleDateString();
 
     TODO_APP.createTodo({title, note, priority, dueDate, dateCreated});
-    UI.displayTodos(TODO_APP.getTodos());
 });
 
 
