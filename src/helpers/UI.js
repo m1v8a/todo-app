@@ -8,12 +8,14 @@ export default class UI {
 
 
     static init() {
-        // passing the displayTodo method loses it's reference to this (UI class)
-        // I don't like how I have to bind the methods into 'this'
-        PubSub.subscribe("todo created", this.displayTodos.bind(this));
-        PubSub.subscribe("todo removed", this.displayTodos.bind(this));
-        PubSub.subscribe("project created", this.displayProjects.bind(this));
-        PubSub.subscribe("project removed", this.displayProjects.bind(this));
+        const handleDisplayTodos = ({ todos }) => this.displayTodos(todos);
+        const handleDisplayProjects = ({ projects }) => this.displayProjects(projects);
+
+        PubSub.subscribe("todo created", handleDisplayTodos);
+        PubSub.subscribe("todo removed", handleDisplayTodos);
+        PubSub.subscribe("project created", handleDisplayProjects);
+        PubSub.subscribe("project removed", handleDisplayProjects);
+        PubSub.subscribe("initialize todo app", handleDisplayProjects);
 
 
         // event listeners for the each todo
@@ -21,7 +23,7 @@ export default class UI {
             if (e.target.nodeName !== "BUTTON") return;
             switch (e.target.dataset.name) {
                 case "remove-button":
-                    PubSub.publish("remove todo button clicked", e.target.dataset.id);
+                    PubSub.publish("remove todo button clicked", { todoId: e.target.dataset.id });
                     break;
             }
         });
@@ -34,7 +36,7 @@ export default class UI {
             const dueDate = new Date(document.querySelector("input[name='due-date']").value).toLocaleDateString();
             const dateCreated = new Date().toLocaleDateString();
 
-            PubSub.publish("create todo button clicked", { title, note, priority, dueDate, dateCreated });
+            PubSub.publish("create todo button clicked", { todo: { title, note, priority, dueDate, dateCreated } });
         });
 
         // event listener for each project
@@ -42,7 +44,7 @@ export default class UI {
             if (e.target.nodeName !== "BUTTON") return;
             switch (e.target.dataset.name) {
                 case "remove-button":
-                    PubSub.publish("remove project button clicked", e.target.dataset.id);
+                    PubSub.publish("remove project button clicked", { projectId: e.target.dataset.id });
                     break;
             }
         });
@@ -50,7 +52,7 @@ export default class UI {
         this.#createProjectButton.addEventListener("click", (e) => {
             e.preventDefault();
             const name = document.querySelector("input[name='project-name']").value;
-            PubSub.publish("create project button clicked", name);
+            PubSub.publish("create project button clicked", { name });
         });
     }
 
@@ -70,21 +72,27 @@ export default class UI {
             li.append(this.#projectTemplate(p));
             this.#projectListEl.append(li);
         });
+
+        console.log(projects);
     }
 
     static #projectTemplate(project) {
         const container = document.createElement("div");
-        container.className = "project"; 
-        
+        container.className = "project";
+
         const name = document.createElement("p");
         name.textContent = project.name;
 
-        const removeButton = document.createElement("button");
-        removeButton.textContent = "Remove";
-        removeButton.dataset.id = project.id;
-        removeButton.dataset.name = "remove-button";
+        container.append(name);
+        // only create a button if the current project is not the default project
+        if (project.id !== "default") {
+            const removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.dataset.id = project.id;
+            removeButton.dataset.name = "remove-button";
+            container.append(removeButton);
+        }
 
-        container.append(name, removeButton);
 
         return container;
     }
