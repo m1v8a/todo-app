@@ -11,10 +11,8 @@ export default class UI {
         const handleDisplayTodos = ({ todos }) => this.displayTodos(todos);
         const handleDisplayProjects = ({ projects }) => this.displayProjects(projects);
 
-        PubSub.subscribe("todo created", handleDisplayTodos);
-        PubSub.subscribe("todo removed", handleDisplayTodos);
-        PubSub.subscribe("project created", handleDisplayProjects);
-        PubSub.subscribe("project removed", handleDisplayProjects);
+        PubSub.subscribe("todos updated", handleDisplayTodos);
+        PubSub.subscribe("projects updated", handleDisplayProjects);
         PubSub.subscribe("initialize todo app", handleDisplayProjects);
 
 

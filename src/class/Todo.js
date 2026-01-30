@@ -1,5 +1,5 @@
 export default class Todo {
-    constructor({ title, note, priority, dateCreated, dueDate }) {
+    constructor({ title, note, priority, dateCreated, dueDate, projectId }) {
         this.title = title;
         this.note = note;
         this.dateCreated = dateCreated;
@@ -7,5 +7,6 @@ export default class Todo {
         this.priority = +priority;
         this.isCompleted = false;
         this.id = crypto.randomUUID();
+        this.projectId = projectId;
     }
 }

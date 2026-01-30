@@ -8,7 +8,12 @@ export default class TODO_APP {
     static active = null;
 
     static init() {
-        const handleRemoveTodo = ({ todoId }) => this.removeTodo(todoId);
+        const handleRemoveTodo = ({ todoId }) => {
+            const todo = this.#findTodo(todoId);
+            this.removeTodo(todoId);
+            this.#removeTodoFromProject(todo);
+            console.log(this.projects);
+        };
         const handleCreateTodo = ({ todo }) => this.createTodo(todo);
         const handleRemoveProject = ({ projectId }) => this.removeProject(projectId);
         const handleCreateProject = ({ name }) => this.createProject(name);
@@ -25,46 +30,59 @@ export default class TODO_APP {
     }
 
     static createTodo({ title, note, priority, dateCreated, dueDate }) {
-        const todo = new Todo({ title, note, priority, dateCreated, dueDate });
+        const todo = new Todo({ title, note, priority, dateCreated, dueDate, projectId: this.active });
         this.todos.push(todo);
         this.#addTodoToProject(todo.id);
 
-        PubSub.publish("todo created", { todos: this.todos });
+        PubSub.publish("todos updated", { todos: this.todos });
     }
 
     static getTodos() {
         return this.todos;
     }
 
+    static #findTodo(todoId) {
+        return this.todos.filter((t) => t.id === todoId)[0];
+    }
+
     static removeTodo(todoId) {
         this.todos = this.todos.filter((t) => t.id !== todoId);
-        PubSub.publish("todo removed", { todos: this.todos });
+        PubSub.publish("todos updated", { todos: this.todos });
     }
 
     static createProject(name) {
         const project = new Project(name);
         this.projects.push(project);
-        PubSub.publish("project created", { projects: this.projects });
+        PubSub.publish("projects updated", { projects: this.projects });
     }
 
     static removeProject(projectId) {
         if (projectId === "default") return;
         this.projects = this.projects.filter((p) => p.id !== projectId);
 
-        PubSub.publish("project removed", { projects: this.projects });
+        PubSub.publish("projects updated", { projects: this.projects });
     }
 
-    static setActive(projectId) { 
+    static setActive(projectId) {
         this.active = projectId;
     }
 
     static #addTodoToProject(todoId) {
-        console.log(this.projects);
         this.projects = this.projects.map((p) => {
-            if(p.id === this.active) {
+            if (p.id === this.active) {
                 p.todos.push(todoId);
             }
             return p
         });
     }
+
+    static #removeTodoFromProject(todo) {
+        this.projects = this.projects.map((p) => {
+            if (p.id === todo.projectId) {
+                p.removeTodo(todo.id);
+            }
+            return p
+        });
+    }
+
 }
