@@ -1,7 +1,8 @@
 import PubSub from "./pubsub.js";
 
 export default class UI {
-    static todoListElement = document.querySelector("#todo-list");
+    static #todoListEl = document.querySelector("#todo-list");
+    static #createTodoButton = document.querySelector("form button");
 
 
     static init() {
@@ -11,22 +12,34 @@ export default class UI {
         PubSub.subscribe("todo removed", this.displayTodos.bind(this));
 
 
-        this.todoListElement.addEventListener("click", (e) => {
+        // event listeners for the each todo
+        this.#todoListEl.addEventListener("click", (e) => {
             if (e.target.nodeName !== "BUTTON") return;
-            switch(e.target.dataset.name) {
+            switch (e.target.dataset.name) {
                 case "remove-button":
                     PubSub.publish("remove button clicked", e.target.dataset.id);
                     break;
             }
         });
+
+        this.#createTodoButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            const title = document.querySelector("input[name='title']").value;
+            const note = document.querySelector("input[name='note']").value;
+            const priority = document.querySelector("select[name='priority']").value;
+            const dueDate = new Date(document.querySelector("input[name='due-date']").value).toLocaleDateString();
+            const dateCreated = new Date().toLocaleDateString();
+
+            PubSub.publish("create button clicked", {title, note, priority, dueDate, dateCreated});
+        });
     }
 
     static displayTodos(todos) {
-        this.todoListElement.innerHTML = "";
+        this.#todoListEl.innerHTML = "";
         todos.forEach((t) => {
             const li = document.createElement("li");
             li.append(this.#todoTemplate(t));
-            this.todoListElement.append(li);
+            this.#todoListEl.append(li);
         })
     }
 
