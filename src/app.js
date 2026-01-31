@@ -1,12 +1,15 @@
 import "./style.css";
-import App from "./modules/App.js";
+import TODO_APP from "./modules/TODO_APP.js";
 
 
-App.createTodo({
-    title: "example", note: "a"
+TODO_APP.createProject({
+    name: "example",
 });
 
 
-console.log(App.getTodos());
+TODO_APP.editProject("abc", {name: "new name"});
+
+
+console.log(TODO_APP.getProjects());
 
 

@@ -4,7 +4,6 @@ export default class Todo {
         this.note = note;
         this.dueDate = dueDate;
         this.priority = priority;
-        // this.id = crypto.randomUUID();
-        this.id = "abc";
+        this.id = crypto.randomUUID();
     }
 }
