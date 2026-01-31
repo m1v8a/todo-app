@@ -9,6 +9,7 @@ export default class TODO_APP {
 
     static init() {
         PubSub.pub("project updated", { projects: this.#projects });
+        PubSub.sub("remove project button clicked", ({ id }) => this.removeProject(id));
     }
 
     // TODO METHODS
@@ -48,7 +49,7 @@ export default class TODO_APP {
 
     static removeProject(id) {
         this.#projects = this.#projects.filter((p) => p.id !== id);
-        PubSub.pub("project updated", {projects: this.#projects});
+        PubSub.pub("project updated", { projects: this.#projects });
     }
 
     static getProjects() {

@@ -24,7 +24,23 @@
         </ul>
     </header>
     <main>
-        <ul id="project-list"></ul>
+        <div class="project-section">
+            <div class="main-header">
+                <h2>Projects</h2>
+                <button id="open-project-form-modal-button">Create Project</button>
+            </div>
+            <ul id="project-list"></ul>
+        </div>
+        <dialog id="form-modal">
+            <form action="">
+                <div>
+                    <label for="project-name-input">Project Name: </label>
+                    <input id="project-name-input" type="text">
+                </div>
+                <button id="close-modal-button">Close</button>
+                <button>Create</button>
+            </form>
+        </dialog>
     </main>
 </body>
 

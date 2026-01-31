@@ -9,6 +9,7 @@
     --bg-alt: #e9ecef;
     --outline: #dee2e6;
     --bg-btn: #212529;
+    --bg-hover: #c0c4c8;
 
     --fg-main: #212529;
     --fg-alt: #f8f9fa;
@@ -22,6 +23,21 @@
     flex-direction: column;
     align-items: end;
 
+}
+
+dialog {
+    margin: auto;
+    padding: 48px 16px;
+    border: none;
+    box-shadow: 0 0 5px var(--bg-alt);
+    background-color: var(--bg-main);
+    position: relative;
+}
+
+#close-modal-button {
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 html {
@@ -46,10 +62,10 @@ p {
 body {
     background-color: var(--bg-main);
     color: var(--fg-main);
-    display: flex; 
+    display: flex;
 
 
-    & > * {
+    &>* {
         min-height: 100vh;
         padding: 16px;
     }
@@ -74,10 +90,48 @@ header {
 
     & ul {
         gap: 12px;
-        width: 100%; 
+        width: 100%;
 
         & li {
             padding: 0.5em 1em;
         }
     }
+}
+
+main {
+    width: 50%;
+
+    & .project-section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        & .main-header {
+            display: flex;
+            gap: 16px;
+        }
+    }
+
+    #project-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+
+        & li article {
+            border: 1px solid var(--outline);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5em 1em;
+            background-color: var(--bg-alt);
+            cursor: pointer;
+        }
+
+        & li article:hover {
+            background-color: var(--bg-hover);
+        }
+
+    }
+
 }

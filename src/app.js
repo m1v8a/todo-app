@@ -8,6 +8,7 @@ UI_CONTROLLER.init();
 TODO_APP.init();
 
 TODO_APP.createProject({name: "All", id: "default" });
+TODO_APP.createProject({name: "Hello"});
 
 
 
