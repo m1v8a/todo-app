@@ -1,15 +1,8 @@
+import project from "./components/project.js";
 import "./style.css";
-import TODO_APP from "./modules/TODO_APP.js";
 
+const main = document.querySelector("main");
 
-TODO_APP.createProject({
-    name: "example",
-});
-
-
-TODO_APP.editProject("abc", {name: "new name"});
-
-
-console.log(TODO_APP.getProjects());
+main.append(project({name: "test"}));
 
 
