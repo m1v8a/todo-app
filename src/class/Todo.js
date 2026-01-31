@@ -9,4 +9,11 @@ export default class Todo {
         this.id = crypto.randomUUID();
         this.projectId = projectId;
     }
+
+    edit({ title, note, priority, dueDate }) {
+        this.title = title;
+        this.note = note;
+        this.priority = priority;
+        this.dueDate = dueDate;
+    }
 }

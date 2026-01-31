@@ -38,12 +38,22 @@ export default class TODO_APP {
         PubSub.publish("todos updated", { todos: this.#getActiveTodos() });
     }
 
+    static editTodo(todoId, { title, note, priority, dueDate }) {
+        for (let i = 0; i < this.todos.length; i++) {
+            if (todoId === this.todos[i].id) {
+                this.todos[i].edit({ title, note, priority, dueDate });
+            }
+        }
+
+        PubSub.publish("todos updated", { todos: this.#getActiveTodos() });
+    }
+
     static getTodos() {
         return this.todos;
     }
 
     static #getActiveTodos() {
-        if(this.activeProjectId === "default") return this.todos;
+        if (this.activeProjectId === "default") return this.todos;
         return this.todos.filter((t) => t.projectId === this.activeProjectId);
     }
 
