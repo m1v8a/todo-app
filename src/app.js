@@ -1,8 +1,15 @@
-import project from "./components/project.js";
+import TODO_APP from "./modules/TODO_APP.js";
+import UI_CONTROLLER from "./modules/UI_CONTROLLER.js";
 import "./style.css";
 
 const main = document.querySelector("main");
 
-main.append(project({name: "test"}));
+UI_CONTROLLER.init();
+TODO_APP.init();
+
+TODO_APP.createProject({name: "All", id: "default" });
+
+
+
 
 
