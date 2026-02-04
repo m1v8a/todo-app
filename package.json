@@ -1,5 +1,5 @@
 {
-  "name": "webpack-template",
+  "name": "Todo App",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,7 +11,8 @@
     "postdeploy": "git checkout main",
     "gh-pages": "git branch gh-pages && git checkout gh-pages",
     "gh-pages-commit":"git add dist -f && git commit -m 'Deployment'",
-    "gh-pages-push": "git subtree push --prefix dist origin gh-pages"
+    "gh-pages-push": "git subtree push --prefix dist origin gh-pages",
+    "commit": "git add . && git commit"
   },
   "keywords": [],
   "author": "",
