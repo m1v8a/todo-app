@@ -32,7 +32,8 @@ export default class App {
     }
 
     static getAllTask() {
-        let tasks;
-        LocalStorage.get()
+       return LocalStorage.get((data) => {
+           return data.tasks;
+       });
     }
 }

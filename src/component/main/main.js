@@ -1,8 +1,7 @@
-import taskForm from "../modal/taskForm.js";
+import taskSection from "./taskSection.js";
 
 export default function main() {
     const main = document.createElement("main");
-    
-    main.append(taskForm());
+    main.append(taskSection());
     return main;
 }

@@ -9,8 +9,11 @@ export default function radio(id, options) {
         r.name = id;
         r.id = opt.id;
         r.value = opt.value;
+        if(opt.checked) r.checked = true;
         const label = document.createElement("label");
-        label.innerHTML = `${r.outerHTML} <span>${opt.textContent}</span>`;
+        const text = document.createElement("span");
+        text.textContent = opt.textContent;
+        label.append(r, text);
 
         li.append(label);
         ul.append(li);
