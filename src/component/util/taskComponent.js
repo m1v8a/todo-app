@@ -57,7 +57,7 @@ export default function taskComponent(task) {
     const buttonCont = document.createElement("div");
     buttonCont.className = "button-container";
 
-    const removeButton = button("Remove", () => console.log("removed"));
+    const removeButton = button("Remove", () => removeTask());
 
     noteCont.append(note);
     fullInfoContent.append(noteCont, buttonCont);
@@ -86,6 +86,12 @@ export default function taskComponent(task) {
                 taskEl.dataset.opened = taskEl.dataset.opened == 1 ? 0 : 1;
             }
         });
+    }
+
+    function removeTask() {
+        App.removeTask(task.id);
+        const updatedTasks = App.getAllTask();
+        displayTask(document.querySelector("#task-list"), updatedTasks);
     }
 
     return li;
