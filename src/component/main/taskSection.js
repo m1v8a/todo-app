@@ -17,14 +17,7 @@ export default function taskSection() {
     section.append(header, ul);
 
     const tasks = App.getAllTask();
-
-    if(!tasks.length) {
-        ul.append(addTaskButton());
-    } else {
-        displayTask(ul, tasks);
-    }
-
-
+    displayTask(ul, tasks);
 
     return section
 }
