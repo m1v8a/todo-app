@@ -5,7 +5,7 @@ import checkbox from "./checkbox.js";
 import caretDown from "./icons/caretDown.js";
 import checkIcon from "./icons/checkIcon.js";
 
-const priorityList = ["urgent", "required", "optional"];
+const priorityList = ["URGENT", "REQUIRED", "OPTIONAL"];
 
 export default function taskComponent(task) {
     const li = document.createElement("li");
@@ -30,14 +30,13 @@ export default function taskComponent(task) {
 
     const priority = document.createElement("p");
     priority.className = "task-priority";
+    priority.textContent = priorityList[+task.priority - 1];
+    priority.classList.add(priorityList[+task.priority - 1].toLowerCase());
 
     const info = document.createElement("div");
     info.className = "info-container";
 
-    const infoTitle = document.createElement("div");
-    infoTitle.className = "task-title-container";
-    infoTitle.append(title);
-    info.append(infoTitle, priority);
+    info.append(title, priority);
 
     // BASIC VIEW
     const basicInfoCont = document.createElement("div");
@@ -53,6 +52,7 @@ export default function taskComponent(task) {
     fullInfoContent.className = "full-info-content";
 
     const noteCont = document.createElement("div");
+    noteCont.className = "note-container";
 
     const buttonCont = document.createElement("div");
     buttonCont.className = "button-container";
