@@ -10,6 +10,7 @@ const priorityList = ["urgent", "required", "optional"];
 export default function taskComponent(task) {
     const li = document.createElement("li");
     li.className = "task";
+    li.dataset.id = task.id;
 
     const title = document.createElement("h3");
     title.textContent = task.title;
@@ -25,6 +26,7 @@ export default function taskComponent(task) {
     const viewButton = button();
     viewButton.classList.add("view-button");
     viewButton.innerHTML = caretDown("#262626", 18);
+    viewButton.addEventListener("click", () => viewTask());
 
     const priority = document.createElement("p");
     priority.className = "task-priority";
@@ -34,14 +36,38 @@ export default function taskComponent(task) {
 
     const infoTitle = document.createElement("div");
     infoTitle.className = "task-title-container";
-    infoTitle.append(title, note);
+    infoTitle.append(title);
     info.append(infoTitle, priority);
 
+    // BASIC VIEW
+    const basicInfoCont = document.createElement("div");
+    basicInfoCont.className = "basic-info";
+    basicInfoCont.append(checkboxEl, info, viewButton);
 
-    li.append(checkboxEl, info, viewButton);
+    
+    // FULL VIEW
+    const fullInfoCont = document.createElement("div");
+    fullInfoCont.className = "full-info";
+
+    const fullInfoContent = document.createElement("div");
+    fullInfoContent.className = "full-info-content";
+
+    const noteCont = document.createElement("div");
+
+    const buttonCont = document.createElement("div");
+    buttonCont.className = "button-container";
+
+    const removeButton = button("Remove", () => console.log("removed"));
+
+    noteCont.append(note);
+    fullInfoContent.append(noteCont, buttonCont);
+    buttonCont.append(removeButton);
+    fullInfoCont.append(fullInfoContent);
 
 
-    if(task.isCompleted) { 
+    li.append(basicInfoCont, fullInfoCont);
+
+    if (task.isCompleted) {
         checkboxEl.innerHTML = checkIcon("#262626", 18);
     }
 
@@ -49,6 +75,17 @@ export default function taskComponent(task) {
         App.completeTask(task.id);
         const updatedTasks = App.getAllTask();
         displayTask(document.querySelector("#task-list"), updatedTasks);
+    }
+
+    function viewTask() {
+        const taskElements = document.querySelectorAll("#task-list .task");
+        [...taskElements].forEach(taskEl => {
+            if (taskEl.dataset.id !== task.id) {
+                taskEl.dataset.opened = 0;
+            } else {
+                taskEl.dataset.opened = taskEl.dataset.opened == 1 ? 0 : 1;
+            }
+        });
     }
 
     return li;
