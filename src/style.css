@@ -14,6 +14,11 @@
 
     --clr-fg-main: #f0ffc3;
     --clr-fg-alt: #262626;
+    --clr-fg-low: #7c7c7c;
+
+    --clr-urgent: #E53935;
+    --clr-required: #FB8C00;
+    --clr-optional: #43A047;
 }
 
 ul {
@@ -54,7 +59,7 @@ textarea {
 
 body {
     background-color: var(--clr-bg-main);
-    color: var(--clr-fg-main);
+    color: var(--clr-fg-alt);
     display: flex;
 }
 
@@ -86,6 +91,18 @@ body {
 .hover:hover {
     background-color: var(--clr-bg-main);
     color: var(--clr-fg-alt);
+}
+
+.urgent {
+    border-color: var(--clr-urgent);
+}
+
+.required {
+    border-color: var(--clr-required);
+}
+
+.optional {
+    border-color: var(--clr-optional);
 }
 
 
@@ -241,7 +258,7 @@ main {
         gap: 1rem;
 
         & #task-list {
-            border: 1px solid var(--clr-border);
+            /* border: 1px solid var(--clr-border); */
             min-height: 150px;
             display: flex;
             flex-direction: column;
@@ -260,33 +277,45 @@ main {
 
             & .task {
                 display: flex;
-                justify-content: space-between;
+                align-items: center;
                 width: 100%;
-                font-size: 0.8rem;
+                height: 50px;
+                gap: 1rem;
+                font-size: 0.85rem;
+                border: 1px solid var(--clr-border);
+                padding: 2em 1em;
 
-                & div:first-child {
+                --box-size: 32px;
+
+                .btn {
+                    background-color: transparent;
+                }
+
+                .checkbox {
+                    width: var(--box-size);
+                    height: var(--box-size);
+                    display: grid;
+                    place-content: center;
+                    border-radius: 4px;
+                }
+
+                .info-container {
                     display: flex;
+                    justify-content: space-between;
+                    width: 100%;
                     align-items: center;
-                    gap: 1rem;
-                    width: inherit;
 
-                    .checkbox {
-                        width: 32px;
-                        height: 32px;
+                    & .task-note {
+                        color: var(--clr-fg-low);
                     }
 
-                    &>div {
-                        border-bottom: 1px solid var(--clr-border);
-                        width: inherit;
+                    & .task-priority {
+                        width: var(--box-size);
+                        height: var(--box-size);
+                        text-align: center;
                     }
                 }
 
-                & div:last-child {
-
-                    & button {
-                        background-color: transparent;
-                    }
-                }
             }
         }
     }
