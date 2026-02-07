@@ -10,7 +10,7 @@
     "deploy": "npm run gh-pages-commit && npm run gh-pages-push",
     "postdeploy": "git checkout main",
     "gh-pages": "git branch gh-pages && git checkout gh-pages",
-    "gh-pages-commit":"git add dist -f && git commit -m 'Deployment'",
+    "gh-pages-commit": "git add dist -f && git commit -m 'Deployment'",
     "gh-pages-push": "git subtree push --prefix dist origin gh-pages",
     "commit": "git add . && git commit"
   },
@@ -19,9 +19,14 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "css-loader": "^7.1.3",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.3.0",
     "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.6",
+    "prettier": "3.8.1",
     "style-loader": "^4.0.0",
     "webpack": "^5.104.1",
     "webpack-cli": "^6.0.1",
