@@ -1,3 +1,4 @@
+import CheckList from "../class/CheckList.js";
 import Project from "../class/Project.js";
 import Task from "../class/Task.js";
 import LocalStorage from "./LocalStorage.js";
@@ -35,6 +36,16 @@ export default class App {
     });
   }
 
+  static openTask(id) {
+    LocalStorage.update((data) => {
+      data.tasks = data.tasks.map((task) => {
+        if (task.id === id) task.isOpened = !task.isOpened;
+        else task.isOpened = false;
+        return task;
+      });
+    });
+  }
+
   static completeTask(id) {
     LocalStorage.update((data) => {
       data.tasks = data.tasks.map((task) => {
@@ -47,6 +58,33 @@ export default class App {
   static getAllTask() {
     return LocalStorage.get((data) => {
       return data.tasks;
+    });
+  }
+
+  static createCheckList(taskId, checkListName) {
+    LocalStorage.update((data) => {
+      data.tasks = data.tasks.map((task) => {
+        if (task.id === taskId) {
+          task.checkList.push(new CheckList(checkListName));
+        }
+        return task;
+      });
+    });
+  }
+
+  static checkCheckList(taskId, checkListId) {
+    LocalStorage.update((data) => {
+      data.tasks = data.tasks.map((task) => {
+        if (task.id === taskId) {
+          task.checkList = task.checkList.map((cl) => {
+            if (cl.id === checkListId) {
+              cl.checked = true;
+            }
+            return cl;
+          });
+        }
+        return task;
+      });
     });
   }
 
